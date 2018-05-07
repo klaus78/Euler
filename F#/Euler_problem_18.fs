@@ -24,6 +24,11 @@
 //    63 66 04 68 89 53 67 30 73 16 69 87 40 31
 //  04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
 
+
+// convert string[] to int[]
+let StringToIntArray (s : string[]) = 
+    s |> Array.map(fun c -> c |> int)
+
 [<EntryPoint>]
 let main argv = 
     let triangleString =    @"  75                             
@@ -42,12 +47,14 @@ let main argv =
       63  66  04  68  89  53  67  30  73  16  69  87  40  31   
     04  62  98  27  23  09  70  98  73  93  38  53  60  04  23"
     let triangle = triangleString.Split('\n')
+                    // split chars
                     |> Array.map(fun s -> s.Trim().Split(' '))
+                    // remove empty chars
                     |> Array.map(fun a -> a |> Array.filter(fun c -> not(System.String.IsNullOrEmpty(c) )  
-                                          // |> Array.map(fun x -> System.Int32.Parse(x))
+                                                            )
                                 )
-                       )
-
+                    // convert string[] to int[]
+                    |> Array.map(fun c -> StringToIntArray c)
 
 
     0 // return an integer exit code
