@@ -25,9 +25,29 @@
 //  04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
 
 
+
 // convert string[] to int[]
 let StringToIntArray (s : string[]) = 
     s |> Array.map(fun c -> c |> int)
+
+
+let findMaxSum (arrays : int[][])  =
+    let rows = (Array.length arrays) - 2
+    // start from lastrow -1
+    for r in [rows .. -1 .. 0] do
+        // get cols for current array (that given by row r)
+        let cols = Array.length arrays.[r] - 1
+        for c in 0..cols do
+            // each value of the array of row r is replaced with the sum
+            // value + max(v1 following row, v2 following row)
+            let m1 = arrays.[r+1].[c]
+            let m2 = arrays.[r+1].[c+1]
+            if m1 > m2 then
+                arrays.[r].[c] <- arrays.[r].[c] + m1
+            else
+                arrays.[r].[c] <- arrays.[r].[c] + m2
+    arrays.[0].[0]        
+
 
 [<EntryPoint>]
 let main argv = 
@@ -46,6 +66,7 @@ let main argv =
         91  71  52  38  17  14  91  43  58  50  27  29  48     
       63  66  04  68  89  53  67  30  73  16  69  87  40  31   
     04  62  98  27  23  09  70  98  73  93  38  53  60  04  23"
+    
     let triangle = triangleString.Split('\n')
                     // split chars
                     |> Array.map(fun s -> s.Trim().Split(' '))
@@ -56,5 +77,8 @@ let main argv =
                     // convert string[] to int[]
                     |> Array.map(fun c -> StringToIntArray c)
 
+    
+    let res = findMaxSum triangle
 
-    0 // return an integer exit code
+    printfn "res %A" res
+    // result is 1074
